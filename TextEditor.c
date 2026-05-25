@@ -11,6 +11,44 @@ void get_first_char(char* character) {
 	}
 
 }
+
+void process_command(char command) {
+	switch (command) {
+	case '0': {
+		printf("Help\n");
+		break;
+	}
+	case '1': {
+		printf("Append text to line\n");
+		break;
+	}
+	case '2': {
+		printf("Start new line\n");
+		break;
+	}
+	case '3': {
+		printf("Save text into file\n");
+		break;
+	}
+	case '4': {
+		printf("Load text from file\n");
+		break;
+	}
+	case '5': {
+		printf("Print text to console\n");
+		break;
+	}
+	case '6': {
+		printf("Insert text by line and index at line\n");
+		break;
+	}
+	case '7': {
+		printf("Search for substrings in text\n");
+		break;
+	}
+	}
+}
+
 int main() {
 	int debug = 0;
 
@@ -24,12 +62,14 @@ int main() {
 	while (1) {
 
 		printf("Enter command you want to execute > ");
-		char word;
-		get_first_char(&word);
-		printf("Your command is %c\n", word);
-		if (word == '\n') {
+		char command;
+		get_first_char(&command);
+		printf("Your command is %c\n", command);
+		if (command == '\n') {
+			printf("Program exited\n");
 			return 0;
 		}
+		process_command(command);
 	}
 	return 0;
 }
