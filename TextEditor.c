@@ -20,6 +20,15 @@ void process_command(char command) {
 	}
 	case '1': {
 		printf("Append text to line\n");
+		printf("Enter text you want to append > ");
+		char character;
+		scanf("%c", &character);
+		printf("Text to add is \"");
+		while (character != '\n') {
+			printf("%c", character);
+			scanf("%c", &character);
+		}
+		printf("\"\n");
 		break;
 	}
 	case '2': {
@@ -28,10 +37,28 @@ void process_command(char command) {
 	}
 	case '3': {
 		printf("Save text into file\n");
+		printf("Enter file name > ");
+		char character;
+		scanf("%c", &character);
+		printf("File name is \"");
+		while (character != '\n') {
+			printf("%c", character);
+			scanf("%c", &character);
+		}
+		printf("\"\n");
 		break;
 	}
 	case '4': {
 		printf("Load text from file\n");
+		printf("Enter file name > ");
+		char character;
+		scanf("%c", &character);
+		printf("File name is \"");
+		while (character != '\n') {
+			printf("%c", character);
+			scanf("%c", &character);
+		}
+		printf("\"\n");
 		break;
 	}
 	case '5': {
@@ -40,10 +67,40 @@ void process_command(char command) {
 	}
 	case '6': {
 		printf("Insert text by line and index at line\n");
+		printf("Enter line and index(format \"5 4\") > ");
+		int line;
+		int index;
+		char character = '1';
+		if (scanf("%d %d", &line, &index) != 2) {
+			printf("Incorrect input\n");
+			return;
+		}
+		while (character != '\n') {
+			scanf("%c", &character);
+		}
+		printf("Enter text to insert > ");
+		scanf("%c", &character);
+		printf("Line is %d\n", line);
+		printf("Index is %d\n", index);
+		printf("Text to insert is \"");
+		while (character != '\n') {
+			printf("%c", character);
+			scanf("%c", &character);
+		}
+		printf("\"\n");
 		break;
 	}
 	case '7': {
 		printf("Search for substrings in text\n");
+		printf("Enter substring > ");
+		char character;
+		scanf("%c", &character);
+		printf("Substring is \"");
+		while (character != '\n') {
+			printf("%c", character);
+			scanf("%c", &character);
+		}
+		printf("\"\n");
 		break;
 	}
 	}
@@ -61,7 +118,7 @@ int main() {
 	
 	while (1) {
 
-		printf("Enter command you want to execute > ");
+		printf("Enter command you want to execute(0 for help) > ");
 		char command;
 		get_first_char(&command);
 		printf("Your command is %c\n", command);
