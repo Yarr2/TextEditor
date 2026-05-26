@@ -84,5 +84,4 @@ void save_to_file(struct string* string, FILE* file) {
 		fputc(node->value, file);
 		node = node->pointer;
 	}
-	fputc('\n', file);
 }

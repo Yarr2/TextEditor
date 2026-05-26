@@ -66,6 +66,26 @@ void destroy_text(struct text* text) {
 	free(text);
 }
 void load_text(struct text* text, char* path) {
+	FILE* file;
+	file = fopen(path, "r");
+	if (file == NULL) {
+		printf("Such file does not exist");
+		return;
+	}
+	destroy_text(text);
+	create_text(text);
+	int character;
+	character = fgetc(file);
+	while (character != EOF) {// EndOfFile value is -1
+		if ((char)character == '\n') {
+			add_line(text);
+		}
+		else {
+			add_character(text->finish->value, (char)character);
+		}
+		character = fgetc(file);
+	}
+	fclose(file);
 
 }
 void save_text(struct text* text, char* path) {
@@ -78,6 +98,7 @@ void save_text(struct text* text, char* path) {
 			line = line->pointer;
 		}
 		save_to_file(line->value, file);
+		if (line != text->finish->value)fputc('\n', file);
 		fclose(file);
 	}
 	else {

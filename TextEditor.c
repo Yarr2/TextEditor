@@ -66,14 +66,17 @@ void process_command(char command,struct text* text) {
 	case '4': {
 		printf("Load text from file\n");
 		printf("Enter file name > ");
-		char character;
-		scanf("%c", &character);
-		printf("File name is \"");
-		while (character != '\n') {
-			printf("%c", character);
-			scanf("%c", &character);
+		char* path = malloc(sizeof(char) * 260);
+		scanf("%c", &path[0]);
+		int counter = 1;
+		while (path[counter - 1] != '\n' && counter < 260) {
+			scanf("%c", &path[counter]);
+			counter++;
 		}
-		printf("\"\n");
+		path[counter - 1] = '\0';
+
+		load_text(text, path);
+		free(path);
 		break;
 	}
 	case '5': {
