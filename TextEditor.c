@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "String.c"
+
+
 void get_first_char(char* character) {
 	
 	scanf("%c", character);
@@ -12,10 +15,19 @@ void get_first_char(char* character) {
 
 }
 
-void process_command(char command) {
+void process_command(char command,struct string* string) {
 	switch (command) {
 	case '0': {
 		printf("Help\n");
+		printf("Following commands are avaliable:\n");
+		printf("0 - help, transfers you to this window\n");
+		printf("1 - append text to current line\n");
+		printf("2 - starts new line\n");
+		printf("3 - saves text to given file\n");
+		printf("4 - loads text from given file\n");
+		printf("5 - prints current text\n");
+		printf("6 - Insert text by line and index\n");
+		printf("7 - search for a substring\n");
 		break;
 	}
 	case '1': {
@@ -23,12 +35,10 @@ void process_command(char command) {
 		printf("Enter text you want to append > ");
 		char character;
 		scanf("%c", &character);
-		printf("Text to add is \"");
 		while (character != '\n') {
-			printf("%c", character);
+			add_character(string, character);
 			scanf("%c", &character);
 		}
-		printf("\"\n");
 		break;
 	}
 	case '2': {
@@ -62,7 +72,9 @@ void process_command(char command) {
 		break;
 	}
 	case '5': {
-		printf("Print text to console\n");
+		printf("Print text to console:\n");
+		print_string(string);
+		printf("\n");
 		break;
 	}
 	case '6': {
@@ -108,9 +120,14 @@ void process_command(char command) {
 
 int main() {
 	int debug = 0;
+	struct string* string = (struct string*)malloc(sizeof(string));
+	create_string(string);
 
 	if (debug) {
-		// something I want to test
+		add_character(string, 'a');
+		add_character(string, 'b');
+		add_character(string, 'f');
+		print_string(string);
 		return 0;
 	}
 	
@@ -126,7 +143,7 @@ int main() {
 			printf("Program exited\n");
 			return 0;
 		}
-		process_command(command);
+		process_command(command,string);
 	}
 	return 0;
 }
