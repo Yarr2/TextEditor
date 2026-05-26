@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "String.c"
+#include "Text.c"
 
 
 void get_first_char(char* character) {
@@ -15,7 +15,7 @@ void get_first_char(char* character) {
 
 }
 
-void process_command(char command,struct string* string) {
+void process_command(char command,struct text* text) {
 	switch (command) {
 	case '0': {
 		printf("Help\n");
@@ -36,13 +36,14 @@ void process_command(char command,struct string* string) {
 		char character;
 		scanf("%c", &character);
 		while (character != '\n') {
-			add_character(string, character);
+			add_character(text->finish->value, character);
 			scanf("%c", &character);
 		}
 		break;
 	}
 	case '2': {
 		printf("Start new line\n");
+		add_line(text);
 		break;
 	}
 	case '3': {
@@ -73,8 +74,7 @@ void process_command(char command,struct string* string) {
 	}
 	case '5': {
 		printf("Print text to console:\n");
-		print_string(string);
-		printf("\n");
+		print_text(text);
 		break;
 	}
 	case '6': {
@@ -120,14 +120,11 @@ void process_command(char command,struct string* string) {
 
 int main() {
 	int debug = 0;
-	struct string* string = (struct string*)malloc(sizeof(string));
-	create_string(string);
+	struct text* text = (struct text*)malloc(sizeof(text));
+	create_text(text);
 
 	if (debug) {
-		add_character(string, 'a');
-		add_character(string, 'b');
-		add_character(string, 'f');
-		print_string(string);
+		printf("DEBUG MODE");
 		return 0;
 	}
 	
@@ -138,12 +135,11 @@ int main() {
 		printf("Enter command you want to execute(0 for help) > ");
 		char command;
 		get_first_char(&command);
-		printf("Your command is %c\n", command);
 		if (command == '\n') {
 			printf("Program exited\n");
 			return 0;
 		}
-		process_command(command,string);
+		process_command(command,text);
 	}
 	return 0;
 }
