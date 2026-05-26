@@ -18,5 +18,11 @@
     <ClCompile Include="TextEditor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="String.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

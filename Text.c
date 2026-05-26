@@ -43,3 +43,26 @@ void print_text(struct text* text) {
 	printf("\n");
 
 }
+void insert_text(struct text* text, int line, int index, struct string* string) {
+	struct line* node = text->start;
+	int counter = 0;
+	while (counter < line && node->pointer != NULL) {
+		counter++;
+		node = node->pointer;
+	}
+	if (counter == line) {
+		insert_text_string(node->value, index, string);
+		return;
+	}
+	else {
+		printf("There is no line with index %d\n", line);
+		return;
+	}
+}
+void destroy_text(struct text* text) {
+	destroy_string(text->start->value);
+	destroy_string(text->finish->value);
+	free(text->start->pointer);
+	free(text->finish->pointer);
+	free(text);
+}

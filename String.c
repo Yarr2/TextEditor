@@ -41,6 +41,7 @@ void push_back(struct string* string, struct string* new_string) {
 	string->finish = new_string->finish;
 }
 
+
 void print_string(struct string* string) {
 	struct node* node = string->start;
 
@@ -48,4 +49,32 @@ void print_string(struct string* string) {
 		printf("%c", node->value);
 		node = node->pointer;
 	}
+}
+void insert_text_string(struct string* string, int index, struct string* text) {
+	if (index == 0) {
+		push_front(string, text);
+		return;
+	}
+
+	struct node* node = string->start;
+	int counter = 0;
+	while (counter < index - 1 && node->pointer != NULL) {
+		counter++;
+		node = node->pointer;
+	}
+	struct node* temp = node->pointer;
+	node->pointer = text->start;
+	text->finish->pointer = temp;
+}
+
+void destroy_string(struct string* string) {
+	struct node* node = string->start;
+	struct node* temp;
+	while (node->pointer != NULL) {
+		temp = node->pointer;
+		free(node);
+		node = temp;
+	}
+	free(node);
+	free(string);
 }

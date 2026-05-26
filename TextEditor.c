@@ -90,16 +90,15 @@ void process_command(char command,struct text* text) {
 		while (character != '\n') {
 			scanf("%c", &character);
 		}
+		struct string* string = (struct string*)malloc(sizeof(struct string));
+		create_string(string);
 		printf("Enter text to insert > ");
 		scanf("%c", &character);
-		printf("Line is %d\n", line);
-		printf("Index is %d\n", index);
-		printf("Text to insert is \"");
 		while (character != '\n') {
-			printf("%c", character);
+			add_character(string, character);
 			scanf("%c", &character);
-		}
-		printf("\"\n");
+		} 
+		insert_text(text, line, index, string);
 		break;
 	}
 	case '7': {
@@ -120,7 +119,7 @@ void process_command(char command,struct text* text) {
 
 int main() {
 	int debug = 0;
-	struct text* text = (struct text*)malloc(sizeof(text));
+	struct text* text = (struct text*)malloc(sizeof(struct text));
 	create_text(text);
 
 	if (debug) {
@@ -135,7 +134,7 @@ int main() {
 		printf("Enter command you want to execute(0 for help) > ");
 		char command;
 		get_first_char(&command);
-		if (command == '\n') {
+		if (command == 'P') {
 			printf("Program exited\n");
 			return 0;
 		}

@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="String.c" />
+    <ClCompile Include="Text.c" />
     <ClCompile Include="TextEditor.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
