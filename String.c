@@ -78,3 +78,11 @@ void destroy_string(struct string* string) {
 	free(node);
 	free(string);
 }
+void save_to_file(struct string* string, FILE* file) {
+	struct node* node = string->start;
+	while (node->pointer != NULL) {
+		fputc(node->value, file);
+		node = node->pointer;
+	}
+	fputc('\n', file);
+}

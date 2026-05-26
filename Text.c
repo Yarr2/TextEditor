@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "String.c"
+#include "String.h"
 
 struct line {
 	struct string* value;
@@ -61,8 +61,26 @@ void insert_text(struct text* text, int line, int index, struct string* string) 
 }
 void destroy_text(struct text* text) {
 	destroy_string(text->start->value);
-	destroy_string(text->finish->value);
 	free(text->start->pointer);
 	free(text->finish->pointer);
 	free(text);
+}
+void load_text(struct text* text, char* path) {
+
+}
+void save_text(struct text* text, char* path) {
+	FILE* file;
+	file = fopen(path, "w");
+	if (file != NULL) {
+		struct line* line = text->start;
+		while (line->pointer != NULL) {
+			save_to_file(line->value, file);
+			line = line->pointer;
+		}
+		save_to_file(line->value, file);
+		fclose(file);
+	}
+	else {
+		printf("Error with file");
+	}
 }

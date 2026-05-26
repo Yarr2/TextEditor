@@ -1,7 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#include "Text.c"
-
+#include "Text.h"
+#include "String.h"
 
 void get_first_char(char* character) {
 	
@@ -49,14 +50,17 @@ void process_command(char command,struct text* text) {
 	case '3': {
 		printf("Save text into file\n");
 		printf("Enter file name > ");
-		char character;
-		scanf("%c", &character);
-		printf("File name is \"");
-		while (character != '\n') {
-			printf("%c", character);
-			scanf("%c", &character);
+		char* path = malloc(sizeof(char)*260);
+		scanf("%c", &path[0]);
+		int counter = 1;
+		while (path[counter - 1] != '\n' && counter < 260) {
+			scanf("%c", &path[counter]);
+			counter++;
 		}
-		printf("\"\n");
+		path[counter - 1] = '\0';
+
+		save_text(text, path);
+		free(path);
 		break;
 	}
 	case '4': {
@@ -136,9 +140,11 @@ int main() {
 		get_first_char(&command);
 		if (command == 'P') {
 			printf("Program exited\n");
+			destroy_text(text);
 			return 0;
 		}
 		process_command(command,text);
 	}
+	destroy_text(text);
 	return 0;
 }

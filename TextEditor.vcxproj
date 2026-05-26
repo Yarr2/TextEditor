@@ -23,6 +23,10 @@
     <ClCompile Include="Text.c" />
     <ClCompile Include="TextEditor.c" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="String.h" />
+    <ClInclude Include="Text.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
