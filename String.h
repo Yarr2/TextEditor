@@ -16,3 +16,4 @@ void print_string(struct string* string);
 void insert_text_string(struct string* string, int index, struct string* text);
 void destroy_string(struct string* string);
 void save_to_file(struct string* string, FILE* file);
+void search_for_substring(struct string* string, struct string* substring, int line_index, int* counter);

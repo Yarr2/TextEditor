@@ -96,3 +96,27 @@ void save_to_file(struct string* string, FILE* file) {
 		node = node->pointer;
 	}
 }
+void search_for_substring(struct string* string, struct string* substring, int line_index, int* substring_counter) {
+	struct node* node = string->start;
+	int counter = 0;
+	while (node->pointer != NULL) {
+		if (node->value == substring->start->value) {
+			struct node* string_node = node;
+			struct node* substring_node = substring->start;
+			while (substring_node->pointer != NULL) {
+				if (string_node->value == substring_node->value) {
+					string_node = string_node->pointer;
+					substring_node = substring_node->pointer;
+					continue;
+				}
+				break;
+			}
+			if (substring_node == substring->finish) {
+				substring_counter[0]++;
+				printf("%d %d\n", line_index, counter);
+			}
+		}
+		counter++;
+		node = node->pointer;
+	}
+}

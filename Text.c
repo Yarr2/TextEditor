@@ -74,6 +74,20 @@ void destroy_text(struct text* text) {
 	}
 	free(text);
 }
+void search_in_text(struct text* text, struct string* string) {
+	struct line* line = text->start;
+	int* counter = malloc(sizeof(int));
+	counter[0] = 0;
+	int line_counter = 0;
+	while (line != NULL) {
+		search_for_substring(line->value, string, line_counter, counter);
+		line = line->pointer;
+		line_counter++;
+	}
+	if (counter[0] == 0) {
+		printf("Substring not found\n");
+	}
+}
 void load_text(struct text* text, char* path) {
 	FILE* file;
 	file = fopen(path, "r");

@@ -118,13 +118,14 @@ void process_command(char command,struct text* text) {
 		printf("Search for substrings in text\n");
 		printf("Enter substring > ");
 		char character;
+		struct string* string = (struct string*)malloc(sizeof(struct string));
+		create_string(string);
 		scanf("%c", &character);
-		printf("Substring is \"");
 		while (character != '\n') {
-			printf("%c", character);
+			add_character(string, character);
 			scanf("%c", &character);
 		}
-		printf("\"\n");
+		search_in_text(text, string);
 		break;
 	}
 	}

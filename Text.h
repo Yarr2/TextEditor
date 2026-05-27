@@ -15,3 +15,4 @@ void insert_text(struct text* text, int line, int index, struct string* string);
 void destroy_text(struct text* text);
 void load_text(struct text* text, char* path);
 void save_text(struct text* text, char* path);
+void search_in_text(struct text* text, struct string* string);
