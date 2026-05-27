@@ -68,6 +68,10 @@ void insert_text_string(struct string* string, int index, struct string* text) {
 		counter++;
 		node = node->pointer;
 	}
+	if (counter != index - 1) {
+		printf("There is no such index to insert text\n");
+		return;
+	}
 	struct node* temp = node->pointer;
 	node->pointer = text->start;
 	text->finish->pointer = temp;
@@ -75,7 +79,6 @@ void insert_text_string(struct string* string, int index, struct string* text) {
 	if (temp == NULL) {
 		string->finish = text->finish;
 	}
-	print_string(string);
 }
 
 void destroy_string(struct string* string) {

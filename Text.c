@@ -45,15 +45,11 @@ void add_line(struct text* text) {
 }
 void print_text(struct text* text) {
 	struct line* line = text->start;
-	int counter = 1;
 	while (line->pointer != NULL) {
-		printf("%d.", counter);
-		counter++;
 		print_string(line->value);
 		printf("\n");
 		line = line->pointer;
 	}
-	printf("%d.", counter);
 	print_string(line->value);
 	printf("\n");
 
@@ -133,8 +129,9 @@ void save_text(struct text* text, char* path) {
 		}
 		save_to_file(line->value, file);
 		fclose(file);
+		printf("Succesfully saved text into file\n");
 	}
 	else {
-		printf("Error with file");
+		printf("Error with filepath");
 	}
 }

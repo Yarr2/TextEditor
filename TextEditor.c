@@ -33,7 +33,6 @@ void process_command(char command,struct text* text) {
 		break;
 	}
 	case '1': {
-		printf("Append text to line\n");
 		printf("Enter text you want to append > ");
 		char character;
 		scanf("%c", &character);
@@ -44,7 +43,7 @@ void process_command(char command,struct text* text) {
 		break;
 	}
 	case '2': {
-		printf("Start new line\n");
+		printf("Starting new line\n");
 		add_line(text);
 		break;
 	}
@@ -81,7 +80,6 @@ void process_command(char command,struct text* text) {
 		break;
 	}
 	case '5': {
-		printf("Print text to console:\n");
 		print_text(text);
 		break;
 	}
