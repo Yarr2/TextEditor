@@ -22,6 +22,16 @@ void create_text(struct text* text) {
 	text->finish = start;
 	text->start = start;
 }
+void clear(struct text* text) {
+	struct line* line = text->start;
+	while (line != NULL) {
+		struct line* next = line->pointer;
+		destroy_string(line->value);
+		free(line);
+		line = next;
+	}
+	create_text(text);
+}
 void add_line(struct text* text) {
 	struct line* new_line = (struct line*)malloc(sizeof(struct line));
 	new_line->pointer = NULL;
@@ -95,10 +105,8 @@ void load_text(struct text* text, char* path) {
 		printf("Such file does not exist\n");
 		return;
 	}
-	destroy_text(text);
-	text->start = NULL;
-	text->finish = NULL;
-	create_text(text);
+
+	clear(text);
 	int character;
 	character = fgetc(file);
 	while (character != EOF) {// EndOfFile value is -1
