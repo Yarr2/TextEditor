@@ -28,12 +28,12 @@ void add_character(struct string* string, char character) {
 }  
 
 void push_front(struct string* string, struct string* new_string) {
-	new_string->finish->pointer = string->start->pointer;
 	new_string->finish->value = string->start->value;
+	new_string->finish->pointer = string->start->pointer;
+
 	free(string->start);
 	string->start = new_string->start;
 }
-
 void push_back(struct string* string, struct string* new_string) {
 	string->finish->pointer = new_string->start->pointer;
 	string->finish->value = new_string->start->value;
@@ -51,6 +51,12 @@ void print_string(struct string* string) {
 	}
 }
 void insert_text_string(struct string* string, int index, struct string* text) {
+	if (string->start == string->finish) {
+		string->start = text->start;
+		string->finish = text->finish;
+		return;
+	}
+	
 	if (index == 0) {
 		push_front(string, text);
 		return;
@@ -65,6 +71,11 @@ void insert_text_string(struct string* string, int index, struct string* text) {
 	struct node* temp = node->pointer;
 	node->pointer = text->start;
 	text->finish->pointer = temp;
+
+	if (temp == NULL) {
+		string->finish = text->finish;
+	}
+	print_string(string);
 }
 
 void destroy_string(struct string* string) {

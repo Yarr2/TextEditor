@@ -92,6 +92,11 @@ void process_command(char command,struct text* text) {
 		int index;
 		char character = '1';
 		if (scanf("%d %d", &line, &index) != 2) {
+			char temp_char;
+			scanf("%c", &temp_char);
+			while (temp_char != '\n') {
+				scanf("%c", &temp_char);
+			}
 			printf("Incorrect input\n");
 			return;
 		}

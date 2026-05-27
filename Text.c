@@ -35,11 +35,15 @@ void add_line(struct text* text) {
 }
 void print_text(struct text* text) {
 	struct line* line = text->start;
+	int counter = 1;
 	while (line->pointer != NULL) {
+		printf("%d.", counter);
+		counter++;
 		print_string(line->value);
 		printf("\n");
 		line = line->pointer;
 	}
+	printf("%d.", counter);
 	print_string(line->value);
 	printf("\n");
 
@@ -61,9 +65,13 @@ void insert_text(struct text* text, int line, int index, struct string* string) 
 	}
 }
 void destroy_text(struct text* text) {
-	destroy_string(text->start->value);
-	free(text->start->pointer);
-	free(text->finish->pointer);
+	struct line* line = text->start;
+	while (line != NULL) {
+		struct line* next = line->pointer;
+		destroy_string(line->value);
+		free(line);
+		line = next;
+	}
 	free(text);
 }
 void load_text(struct text* text, char* path) {
@@ -74,6 +82,8 @@ void load_text(struct text* text, char* path) {
 		return;
 	}
 	destroy_text(text);
+	text->start = NULL;
+	text->finish = NULL;
 	create_text(text);
 	int character;
 	character = fgetc(file);
