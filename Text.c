@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include "String.h"
@@ -69,7 +70,7 @@ void load_text(struct text* text, char* path) {
 	FILE* file;
 	file = fopen(path, "r");
 	if (file == NULL) {
-		printf("Such file does not exist");
+		printf("Such file does not exist\n");
 		return;
 	}
 	destroy_text(text);
@@ -77,7 +78,7 @@ void load_text(struct text* text, char* path) {
 	int character;
 	character = fgetc(file);
 	while (character != EOF) {// EndOfFile value is -1
-		if ((char)character == '\n') {
+		if (character == '\n') {
 			add_line(text);
 		}
 		else {
@@ -95,10 +96,10 @@ void save_text(struct text* text, char* path) {
 		struct line* line = text->start;
 		while (line->pointer != NULL) {
 			save_to_file(line->value, file);
+			fputc('\n', file);
 			line = line->pointer;
 		}
 		save_to_file(line->value, file);
-		if (line != text->finish->value)fputc('\n', file);
 		fclose(file);
 	}
 	else {

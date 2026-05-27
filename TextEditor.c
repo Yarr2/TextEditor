@@ -29,6 +29,7 @@ void process_command(char command,struct text* text) {
 		printf("5 - prints current text\n");
 		printf("6 - Insert text by line and index\n");
 		printf("7 - search for a substring\n");
+		printf("Enter - to exit program\n");
 		break;
 	}
 	case '1': {
