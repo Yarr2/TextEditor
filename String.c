@@ -81,6 +81,30 @@ void insert_text_string(struct string* string, int index, struct string* text) {
 	}
 }
 
+void insert_replacement_string(struct string* string, int index, struct string* text) {
+	int current_index = 0;
+	struct node* node = string->start;
+	while (current_index < index && node->pointer != NULL) {
+		node = node->pointer;
+		current_index++;
+	}
+	if (current_index < index) {
+		printf("There is no such index at this line");
+		return;
+	}
+	struct node* insert_node = text->start;
+	while (node->pointer != NULL && insert_node->pointer != NULL) {
+		node->value = insert_node->value;
+
+		node = node->pointer;
+		insert_node = insert_node->pointer;
+	}
+	while (insert_node->pointer != NULL) {
+		add_character(string, insert_node->value);
+		insert_node = insert_node->pointer;
+	}
+}
+
 void destroy_string(struct string* string) {
 	struct node* node = string->start;
 	struct node* temp;
@@ -121,5 +145,36 @@ void search_for_substring(struct string* string, struct string* substring, int l
 		}
 		counter++;
 		node = node->pointer;
+	}
+}
+void delete_inside_string(struct string* string, int index, int number_of_symbols) {
+	int current_index = 0;
+	struct node* node = string->start;
+	while (current_index < index - 1 && node->pointer != NULL) {
+		node = node->pointer;
+		current_index++;
+	}
+	if (current_index < index - 1) {
+		printf("There is no such index at this line");
+		return;
+	}
+	
+	struct node* delete_node = node->pointer;
+	if (index == 0) {
+		delete_node = node;
+	}
+	int counter = 0;
+	struct node* temp_pointer;
+	while (counter < number_of_symbols && delete_node -> pointer != NULL) {
+		temp_pointer = delete_node->pointer;
+		delete_node->value = 0;
+		delete_node->pointer = NULL;
+		free(delete_node);
+		delete_node = temp_pointer;
+		counter++;
+	}
+	node->pointer = delete_node;
+	if (index == 0) {
+		string->start = delete_node;
 	}
 }

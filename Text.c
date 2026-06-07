@@ -70,6 +70,22 @@ void insert_text(struct text* text, int line, int index, struct string* string) 
 		return;
 	}
 }
+void insert_replacement_text(struct text* text, int line, int index, struct string* string) {
+	struct line* node = text->start;
+	int counter = 0;
+	while (counter < line && node->pointer != NULL) {
+		counter++;
+		node = node->pointer;
+	}
+	if (counter == line) {
+		insert_replacement_string(node->value, index, string);
+		return;
+	}
+	else {
+		printf("There is no line with index %d\n", line);
+		return;
+	}
+}
 void destroy_text(struct text* text) {
 	struct line* line = text->start;
 	while (line != NULL) {
@@ -94,6 +110,25 @@ void search_in_text(struct text* text, struct string* string) {
 		printf("Substring not found\n");
 	}
 }
+
+
+void delete_inside_text(struct text* text, int line, int index, int number_of_symbols) {
+	struct line* node = text->start;
+	int counter = 0;
+	while (counter < line && node->pointer != NULL) {
+		counter++;
+		node = node->pointer;
+	}
+	if (counter == line) {
+		delete_inside_string(node->value, index, number_of_symbols);
+		return;
+	}
+	else {
+		printf("There is no line with index %d\n", line);
+		return;
+	}
+}
+
 void load_text(struct text* text, char* path) {
 	FILE* file;
 	file = fopen(path, "r");

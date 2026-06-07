@@ -3,127 +3,100 @@
 #include <stdlib.h>
 #include "Text.h"
 #include "String.h"
+#include "Commands.h"
 
-void get_first_char(char* character) {
+void get_command(char (*character)[2]) {
 	
-	scanf("%c", character);
-	
+	scanf_s("%c", character, 2);
+
 	char temp_char = character[0];
 	
 	while (temp_char != '\n') {
-		scanf("%c", &temp_char);
+		scanf_s("%c", &temp_char, 1);
 	}
 
 }
 
-void process_command(char command,struct text* text) {
-	switch (command) {
-	case '0': {
-		printf("Help\n");
-		printf("Following commands are avaliable:\n");
-		printf("0 - help, transfers you to this window\n");
-		printf("1 - append text to current line\n");
-		printf("2 - starts new line\n");
-		printf("3 - saves text to given file\n");
-		printf("4 - loads text from given file\n");
-		printf("5 - prints current text\n");
-		printf("6 - Insert text by line and index\n");
-		printf("7 - search for a substring\n");
-		printf("P - to exit program\n");
+void process_command(int command,struct text* text) {
+	switch (command) { // functions from Command.c
+	case 0:
+	{
+		help();
 		break;
 	}
-	case '1': {
-		printf("Enter text you want to append > ");
-		char character;
-		scanf("%c", &character);
-		while (character != '\n') {
-			add_character(text->finish->value, character);
-			scanf("%c", &character);
-		}
+	case 1:
+	{
+		append_text(text);
 		break;
 	}
-	case '2': {
-		printf("Starting new line\n");
-		add_line(text);
+	case 2:
+	{
+		start_new_line(text);
 		break;
 	}
-	case '3': {
-		printf("Save text into file\n");
-		printf("Enter file name > ");
-		char* path = malloc(sizeof(char)*260);
-		scanf("%c", &path[0]);
-		int counter = 1;
-		while (path[counter - 1] != '\n' && counter < 260) {
-			scanf("%c", &path[counter]);
-			counter++;
-		}
-		path[counter - 1] = '\0';
-
-		save_text(text, path);
-		free(path);
+	case 3:
+	{
+		save_text_to_file(text);
 		break;
 	}
-	case '4': {
-		printf("Load text from file\n");
-		printf("Enter file name > ");
-		char* path = malloc(sizeof(char) * 260);
-		scanf("%c", &path[0]);
-		int counter = 1;
-		while (path[counter - 1] != '\n' && counter < 260) {
-			scanf("%c", &path[counter]);
-			counter++;
-		}
-		path[counter - 1] = '\0';
-
-		load_text(text, path);
-		free(path);
+	case 4:
+	{
+		load_from_file(text);
 		break;
 	}
-	case '5': {
+	case 5:
+	{
 		print_text(text);
 		break;
 	}
-	case '6': {
-		printf("Insert text by line and index at line\n");
-		printf("Enter line and index(format \"5 4\") > ");
-		int line;
-		int index;
-		char character = '1';
-		if (scanf("%d %d", &line, &index) != 2) {
-			char temp_char;
-			scanf("%c", &temp_char);
-			while (temp_char != '\n') {
-				scanf("%c", &temp_char);
-			}
-			printf("Incorrect input\n");
-			return;
-		}
-		while (character != '\n') {
-			scanf("%c", &character);
-		}
-		struct string* string = (struct string*)malloc(sizeof(struct string));
-		create_string(string);
-		printf("Enter text to insert > ");
-		scanf("%c", &character);
-		while (character != '\n') {
-			add_character(string, character);
-			scanf("%c", &character);
-		} 
-		insert_text(text, line, index, string);
+	case 6:
+	{
+		insert_into_text(text);
 		break;
 	}
-	case '7': {
-		printf("Search for substrings in text\n");
-		printf("Enter substring > ");
-		char character;
-		struct string* string = (struct string*)malloc(sizeof(struct string));
-		create_string(string);
-		scanf("%c", &character);
-		while (character != '\n') {
-			add_character(string, character);
-			scanf("%c", &character);
-		}
-		search_in_text(text, string);
+	case 7:
+	{
+		search_substring(text);
+		break;
+	}
+	case 8: 
+	{
+		delete_from_text(text);
+		break;
+	}
+	case 9:
+	{
+		undo_commands(text);
+		break;
+	}
+	case 10:
+	{
+		redo_commands(text);
+		break;
+	}
+	case 11:
+	{
+		cut_symbols(text);
+		break;
+	}
+	case 12:
+	{
+		paste_symbols(text);
+		break;
+	}
+	case 13:
+	{
+		copy_symbols(text);
+		break;
+	}
+	case 14:
+	{
+		insert_with_replacement(text);
+		break;
+	}
+	case 15:
+	{
+		printf("Cursor logic to be implemented\n");
 		break;
 	}
 	}
@@ -144,13 +117,20 @@ int main() {
 	while (1) {
 
 		printf("Enter command you want to execute(0 for help) > ");
-		char command;
-		get_first_char(&command);
-		if (command == 'P') {
+		int command = -1;
+		scanf_s("%d", &command);
+		char character;
+		scanf_s("%c", &character, 1);
+		if (character == 'P') {
 			printf("Program exited\n");
 			destroy_text(text);
 			return 0;
 		}
+		while (character != '\n')
+		{
+			scanf_s("%c", &character, 1);
+		}
+
 		process_command(command,text);
 	}
 	destroy_text(text);

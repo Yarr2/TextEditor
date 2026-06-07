@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Commands.c" />
     <ClCompile Include="String.c" />
     <ClCompile Include="Text.c" />
     <ClCompile Include="TextEditor.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Text.h" />
   </ItemGroup>
