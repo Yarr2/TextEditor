@@ -4,6 +4,7 @@
 #include "Text.h"
 #include "String.h"
 #include "Commands.h"
+#include "Stack.h"
 
 void get_command(char (*character)[2]) {
 	
@@ -108,7 +109,23 @@ int main() {
 	create_text(text);
 
 	if (debug) {
-		printf("DEBUG MODE");
+		printf("DEBUG MODE\n");
+		struct stack* stack = create_stack();
+		struct data* data = (struct data*)malloc(sizeof(struct data));
+		data->value = 15;
+		push(stack, data);
+		push(stack, data);
+		push(stack, data);
+
+		data->value = 67;
+		push(stack, data);
+		data->value = 0;
+		pop(stack,data);
+		print_stack(stack);
+		
+		printf("Popped - %d", data->value);
+		destroy_stack(stack);
+		destroy_text(text);
 		return 0;
 	}
 	
