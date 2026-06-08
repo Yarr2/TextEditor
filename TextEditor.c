@@ -18,7 +18,7 @@ void get_command(char (*character)[2]) {
 
 }
 
-void process_command(int command,struct text* text) {
+void process_command(int command,struct text* text,struct string* copy_buffer) {
 	switch (command) { // functions from Command.c
 	case 0:
 	{
@@ -77,17 +77,17 @@ void process_command(int command,struct text* text) {
 	}
 	case 11:
 	{
-		cut_symbols(text);
+		cut_symbols(text, copy_buffer);
 		break;
 	}
 	case 12:
 	{
-		paste_symbols(text);
+		paste_symbols(text, copy_buffer);
 		break;
 	}
 	case 13:
 	{
-		copy_symbols(text);
+		copy_symbols(text, copy_buffer);
 		break;
 	}
 	case 14:
@@ -105,6 +105,8 @@ void process_command(int command,struct text* text) {
 
 int main() {
 	int debug = 0;
+	struct string* copy_buffer = (struct string*)malloc(sizeof(struct string));
+	create_string(copy_buffer);
 	struct text* text = (struct text*)malloc(sizeof(struct text));
 	create_text(text);
 
@@ -148,7 +150,7 @@ int main() {
 			scanf_s("%c", &character, 1);
 		}
 
-		process_command(command,text);
+		process_command(command,text,copy_buffer);
 	}
 	destroy_text(text);
 	return 0;

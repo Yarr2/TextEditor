@@ -50,6 +50,24 @@ void print_string(struct string* string) {
 		node = node->pointer;
 	}
 }
+
+void clear_string(struct string* string) {
+	struct node* node = string->start;
+	struct node* temp;
+	while (node->pointer != NULL) {
+		temp = node->pointer;
+		free(node);
+		node = temp;
+	}
+	free(node);
+	struct node* new_node = (struct node*)malloc(sizeof(struct node));
+	new_node->pointer = NULL;
+	new_node->value = '\0';
+
+	string->start = new_node;
+	string->finish = new_node;
+}
+
 void insert_text_string(struct string* string, int index, struct string* text) {
 	if (string->start == string->finish) {
 		string->start = text->start;
@@ -123,6 +141,28 @@ void save_to_file(struct string* string, FILE* file) {
 		node = node->pointer;
 	}
 }
+
+void copy_from_string(struct string* string, int index, int number_of_symbolls, struct string* copy_buffer) {
+	int current_index = 0;
+	struct node* node = string->start;
+	while (current_index < index && node->pointer != NULL) {
+		node = node->pointer;
+		current_index++;
+	}
+	if (current_index < index) {
+		printf("There is no such index at this line");
+		return;
+	}
+
+	clear_string(copy_buffer);
+	int counter = 0;
+	while (counter < number_of_symbolls && node->pointer != NULL) {
+		add_character(copy_buffer, node->value);
+		node = node->pointer;
+		counter++;
+	}
+}
+
 void search_for_substring(struct string* string, struct string* substring, int line_index, int* substring_counter) {
 	struct node* node = string->start;
 	int counter = 0;
@@ -176,5 +216,14 @@ void delete_inside_string(struct string* string, int index, int number_of_symbol
 	node->pointer = delete_node;
 	if (index == 0) {
 		string->start = delete_node;
+	}
+}
+
+void copy_string(struct string* original, struct string* copy) {
+	clear_string(copy);
+	struct node* node = original->start;
+	while (node->pointer != NULL) {
+		add_character(copy, node->value);
+		node = node->pointer;
 	}
 }

@@ -129,6 +129,23 @@ void delete_inside_text(struct text* text, int line, int index, int number_of_sy
 	}
 }
 
+void copy_from_text(struct text* text, int line, int index, int number_of_symbolls, struct string* copy_buffer) {
+	struct line* node = text->start;
+	int counter = 0;
+	while (counter < line && node->pointer != NULL) {
+		counter++;
+		node = node->pointer;
+	}
+	if (counter == line) {
+		copy_from_string(node->value, index, number_of_symbolls, copy_buffer);
+		return;
+	}
+	else {
+		printf("There is no line with index %d\n", line);
+		return;
+	}
+}
+
 void load_text(struct text* text, char* path) {
 	FILE* file;
 	file = fopen(path, "r");

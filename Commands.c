@@ -140,16 +140,76 @@ void redo_commands(struct text* text) {
 	printf("Redo command, not implemented\n");
 }
 
-void cut_symbols(struct text* text) {
-	printf("Cut command, not implemented\n");
+void cut_symbols(struct text* text, struct string* copy_buffer) {
+	printf("Cut command \n");
+	int line;
+	int index;
+	int number_of_symbols;
+	printf("Enter line,index and number of symbols > ");
+	if (scanf_s("%d %d %d", &line, &index, &number_of_symbols) != 3) {
+		char temp_char;
+		scanf_s("%c", &temp_char, 1);
+		while (temp_char != '\n') {
+			scanf_s("%c", &temp_char, 1);
+		}
+		printf("Incorrect input\n");
+		return;
+	}
+	char temp_char;
+	scanf_s("%c", &temp_char, 1);
+	while (temp_char != '\n') {
+		scanf_s("%c", &temp_char, 1);
+	}
+	copy_from_text(text, line, index, number_of_symbols, copy_buffer);
+	delete_inside_text(text, line, index, number_of_symbols);
+	
 }
 
-void paste_symbols(struct text* text) {
-	printf("Paste command, not implemented\n");
+void paste_symbols(struct text* text, struct string* copy_buffer) {
+	printf("Paste command\n");
+	printf("Enter line and index(format \"5 4\") > ");
+	int line;
+	int index;
+	char character = '1';
+	if (scanf_s("%d %d", &line, &index) != 2) {
+		char temp_char;
+		scanf_s("%c", &temp_char, 1);
+		while (temp_char != '\n') {
+			scanf_s("%c", &temp_char, 1);
+		}
+		printf("Incorrect input\n");
+		return;
+	}
+	while (character != '\n') {
+		scanf_s("%c", &character, 1);
+	}
+	struct string* copy_of_buffer = (struct string*)malloc(sizeof(struct string));
+	create_string(copy_of_buffer);
+	copy_string(copy_buffer, copy_of_buffer);
+	insert_text(text, line, index, copy_of_buffer);
 }
 
-void copy_symbols(struct text* text) {
-	printf("Copy symbols, not implemented\n");
+void copy_symbols(struct text* text, struct string* copy_buffer) {
+	printf("Copy symbols\n");
+	int line;
+	int index;
+	int number_of_symbols;
+	printf("Enter line,index and number of symbols > ");
+	if (scanf_s("%d %d %d", &line, &index, &number_of_symbols) != 3) {
+		char temp_char;
+		scanf_s("%c", &temp_char, 1);
+		while (temp_char != '\n') {
+			scanf_s("%c", &temp_char, 1);
+		}
+		printf("Incorrect input\n");
+		return;
+	}
+	char temp_char;
+	scanf_s("%c", &temp_char, 1);
+	while (temp_char != '\n') {
+		scanf_s("%c", &temp_char, 1);
+	}
+	copy_from_text(text, line, index, number_of_symbols, copy_buffer);
 }
 
 void insert_with_replacement(struct text* text) {

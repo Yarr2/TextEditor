@@ -19,3 +19,4 @@ void save_text(struct text* text, char* path);
 void search_in_text(struct text* text, struct string* string);
 void clear(struct text* text);
 void delete_inside_text(struct text* text, int line, int index, int number_of_symbols);
+void copy_from_text(struct text* text, int line, int index, int number_of_symbolls, struct string* copy_buffer);
