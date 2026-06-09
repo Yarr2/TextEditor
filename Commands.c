@@ -18,7 +18,7 @@ void help() {
 	printf("P - to exit program\n");
 }
 
-void append_text(struct text* text) {
+void append_text(struct text* text, struct stack* stack) {
 	printf("Enter text you want to append > ");
 	char character;
 	scanf_s("%c", &character, 1);
@@ -65,7 +65,7 @@ void load_from_file(struct text* text) {
 	free(path);
 }
 
-void insert_into_text(struct text* text) {
+void insert_into_text(struct text* text, struct stack* stack) {
 	printf("Insert text by line and index at line\n");
 	printf("Enter line and index(format \"5 4\") > ");
 	int line;
@@ -91,7 +91,7 @@ void insert_into_text(struct text* text) {
 		add_character(string, character);
 		scanf_s("%c", &character, 1);
 	}
-	insert_text(text, line, index, string);
+	insert_text(text, line, index, string, stack);
 }
 
 void search_substring(struct text* text) {
@@ -107,7 +107,7 @@ void search_substring(struct text* text) {
 	}
 	search_in_text(text, string);
 }
-void delete_from_text(struct text* text) {
+void delete_from_text(struct text* text, struct stack* stack) {
 	int line;
 	int index;
 	int number_of_symbols;
@@ -127,7 +127,7 @@ void delete_from_text(struct text* text) {
 		scanf_s("%c", &temp_char, 1);
 	}
 
-	delete_inside_text(text, line, index, number_of_symbols);
+	delete_inside_text(text, line, index, number_of_symbols, stack);
 
 
 }
@@ -140,7 +140,7 @@ void redo_commands(struct text* text) {
 	printf("Redo command, not implemented\n");
 }
 
-void cut_symbols(struct text* text, struct string* copy_buffer) {
+void cut_symbols(struct text* text, struct string* copy_buffer, struct stack* stack) {
 	printf("Cut command \n");
 	int line;
 	int index;
@@ -161,11 +161,11 @@ void cut_symbols(struct text* text, struct string* copy_buffer) {
 		scanf_s("%c", &temp_char, 1);
 	}
 	copy_from_text(text, line, index, number_of_symbols, copy_buffer);
-	delete_inside_text(text, line, index, number_of_symbols);
+	delete_inside_text(text, line, index, number_of_symbols, stack);
 	
 }
 
-void paste_symbols(struct text* text, struct string* copy_buffer) {
+void paste_symbols(struct text* text, struct string* copy_buffer, struct stack* stack) {
 	printf("Paste command\n");
 	printf("Enter line and index(format \"5 4\") > ");
 	int line;
@@ -186,7 +186,7 @@ void paste_symbols(struct text* text, struct string* copy_buffer) {
 	struct string* copy_of_buffer = (struct string*)malloc(sizeof(struct string));
 	create_string(copy_of_buffer);
 	copy_string(copy_buffer, copy_of_buffer);
-	insert_text(text, line, index, copy_of_buffer);
+	insert_text(text, line, index, copy_of_buffer, stack);
 }
 
 void copy_symbols(struct text* text, struct string* copy_buffer) {
@@ -212,7 +212,7 @@ void copy_symbols(struct text* text, struct string* copy_buffer) {
 	copy_from_text(text, line, index, number_of_symbols, copy_buffer);
 }
 
-void insert_with_replacement(struct text* text) {
+void insert_with_replacement(struct text* text, struct stack* stack) {
 	printf("Insert text with replacement by line and index\n");
 	printf("Enter line and index(format \"5 4\") > ");
 	int line;
@@ -238,5 +238,5 @@ void insert_with_replacement(struct text* text) {
 		add_character(string, character);
 		scanf_s("%c", &character, 1);
 	}
-	insert_replacement_text(text, line, index, string);
+	insert_replacement_text(text, line, index, string, stack);
 }

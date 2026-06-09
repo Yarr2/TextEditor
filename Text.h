@@ -11,12 +11,12 @@ struct text {
 void create_text(struct text* text);
 void add_line(struct text* text);
 void print_text(struct text* text);
-void insert_text(struct text* text, int line, int index, struct string* string);
-void insert_replacement_text(struct text* text, int line, int index, struct string* string);
+void insert_text(struct text* text, int line, int index, struct string* string, struct stack* stack);
+void insert_replacement_text(struct text* text, int line, int index, struct string* string, struct stack* stack);
 void destroy_text(struct text* text);
 void load_text(struct text* text, char* path);
 void save_text(struct text* text, char* path);
 void search_in_text(struct text* text, struct string* string);
 void clear(struct text* text);
-void delete_inside_text(struct text* text, int line, int index, int number_of_symbols);
+void delete_inside_text(struct text* text, int line, int index, int number_of_symbols, struct stack* stack);
 void copy_from_text(struct text* text, int line, int index, int number_of_symbolls, struct string* copy_buffer);

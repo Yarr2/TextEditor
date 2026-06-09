@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "Stack.h"
 struct node {
 	char value;
 	struct node* pointer;
@@ -50,7 +50,15 @@ void print_string(struct string* string) {
 		node = node->pointer;
 	}
 }
-
+int get_size(struct string* string) {
+	int counter = 0;
+	struct node* node = string->start;
+	while (node->pointer != NULL) {
+		counter++;
+		node = node->pointer;
+	}
+	return counter;
+}
 void clear_string(struct string* string) {
 	struct node* node = string->start;
 	struct node* temp;
@@ -68,15 +76,23 @@ void clear_string(struct string* string) {
 	string->finish = new_node;
 }
 
-void insert_text_string(struct string* string, int index, struct string* text) {
+void insert_text_string(struct string* string, int index, struct string* text, struct data* data, struct stack* stack) {
+	data->number_of_symbols = get_size(text);
+	data->string = NULL;
+	data->command = Delete;
+
 	if (string->start == string->finish) {
 		string->start = text->start;
 		string->finish = text->finish;
+		data->index = 0;
+		push(stack, data);
 		return;
 	}
 	
 	if (index == 0) {
 		push_front(string, text);
+		data->index = 0;
+		push(stack, data);
 		return;
 	}
 
@@ -90,6 +106,7 @@ void insert_text_string(struct string* string, int index, struct string* text) {
 		printf("There is no such index to insert text\n");
 		return;
 	}
+	
 	struct node* temp = node->pointer;
 	node->pointer = text->start;
 	text->finish->pointer = temp;
@@ -97,9 +114,11 @@ void insert_text_string(struct string* string, int index, struct string* text) {
 	if (temp == NULL) {
 		string->finish = text->finish;
 	}
+	data->index = index;
+	push(stack, data);
 }
 
-void insert_replacement_string(struct string* string, int index, struct string* text) {
+void insert_replacement_string(struct string* string, int index, struct string* text, struct data* data, struct stack* stack) {
 	int current_index = 0;
 	struct node* node = string->start;
 	while (current_index < index && node->pointer != NULL) {
@@ -110,10 +129,16 @@ void insert_replacement_string(struct string* string, int index, struct string* 
 		printf("There is no such index at this line");
 		return;
 	}
+	data->command = InsertWithReplacment;
+	data->index = index;
+	data->number_of_symbols = get_size(text);
+	data->string = (struct string*)malloc(sizeof(struct string));
+	create_string(data->string);
+
 	struct node* insert_node = text->start;
 	while (node->pointer != NULL && insert_node->pointer != NULL) {
+		add_character(data->string, node->value);
 		node->value = insert_node->value;
-
 		node = node->pointer;
 		insert_node = insert_node->pointer;
 	}
@@ -121,6 +146,7 @@ void insert_replacement_string(struct string* string, int index, struct string* 
 		add_character(string, insert_node->value);
 		insert_node = insert_node->pointer;
 	}
+	push(stack, data);
 }
 
 void destroy_string(struct string* string) {

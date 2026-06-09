@@ -18,7 +18,7 @@ void get_command(char (*character)[2]) {
 
 }
 
-void process_command(int command,struct text* text,struct string* copy_buffer) {
+void process_command(int command,struct text* text,struct string* copy_buffer, struct stack* stack) {
 	switch (command) { // functions from Command.c
 	case 0:
 	{
@@ -27,7 +27,7 @@ void process_command(int command,struct text* text,struct string* copy_buffer) {
 	}
 	case 1:
 	{
-		append_text(text);
+		append_text(text, stack);// stack
 		break;
 	}
 	case 2:
@@ -52,7 +52,7 @@ void process_command(int command,struct text* text,struct string* copy_buffer) {
 	}
 	case 6:
 	{
-		insert_into_text(text);
+		insert_into_text(text, stack); // stack
 		break;
 	}
 	case 7:
@@ -62,7 +62,7 @@ void process_command(int command,struct text* text,struct string* copy_buffer) {
 	}
 	case 8: 
 	{
-		delete_from_text(text);
+		delete_from_text(text, stack); // stack
 		break;
 	}
 	case 9:
@@ -77,12 +77,12 @@ void process_command(int command,struct text* text,struct string* copy_buffer) {
 	}
 	case 11:
 	{
-		cut_symbols(text, copy_buffer);
+		cut_symbols(text, copy_buffer ,stack); // stack
 		break;
 	}
 	case 12:
 	{
-		paste_symbols(text, copy_buffer);
+		paste_symbols(text, copy_buffer, stack); // stack
 		break;
 	}
 	case 13:
@@ -92,13 +92,29 @@ void process_command(int command,struct text* text,struct string* copy_buffer) {
 	}
 	case 14:
 	{
-		insert_with_replacement(text);
+		insert_with_replacement(text, stack); // stack
 		break;
 	}
 	case 15:
 	{
 		printf("Cursor logic to be implemented\n");
 		break;
+	}
+	case 16: 
+	{
+		struct data* data = (struct data*)malloc(sizeof(struct data));
+
+		peek(stack,data);
+		printf("Last command - ");
+		switch (data->command) {
+		case Delete: printf("DELETE"); break;
+		case Insert: printf("INSERT"); break;
+		case InsertWithReplacment: printf("REPLACEMENT"); break;
+		default: printf("UNKNOWN"); break;
+		}
+
+		printf(",index - %d, number - %d\n", data->index, data->number_of_symbols);
+		free(data);
 	}
 	}
 }
@@ -109,24 +125,9 @@ int main() {
 	create_string(copy_buffer);
 	struct text* text = (struct text*)malloc(sizeof(struct text));
 	create_text(text);
-
+	struct stack* stack = create_stack();
 	if (debug) {
 		printf("DEBUG MODE\n");
-		struct stack* stack = create_stack();
-		struct data* data = (struct data*)malloc(sizeof(struct data));
-		data->value = 15;
-		push(stack, data);
-		push(stack, data);
-		push(stack, data);
-
-		data->value = 67;
-		push(stack, data);
-		data->value = 0;
-		pop(stack,data);
-		print_stack(stack);
-		
-		printf("Popped - %d", data->value);
-		destroy_stack(stack);
 		destroy_text(text);
 		return 0;
 	}
@@ -142,6 +143,7 @@ int main() {
 		scanf_s("%c", &character, 1);
 		if (character == 'P') {
 			printf("Program exited\n");
+			destroy_string(copy_buffer);
 			destroy_text(text);
 			return 0;
 		}
@@ -150,8 +152,7 @@ int main() {
 			scanf_s("%c", &character, 1);
 		}
 
-		process_command(command,text,copy_buffer);
+		process_command(command,text,copy_buffer, stack);
 	}
-	destroy_text(text);
 	return 0;
 }

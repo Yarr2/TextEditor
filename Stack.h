@@ -1,7 +1,17 @@
 #pragma once
 
+enum Command {
+	InsertWithReplacment,
+	Insert,
+	Delete
+};
+
 struct data {
-	int value;
+	enum Command command;
+	int line;
+	int index;
+	int number_of_symbols;
+	struct string* string;
 };
 
 struct stack {

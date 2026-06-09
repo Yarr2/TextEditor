@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "String.h"
+#include "Stack.h"
 
 struct line {
 	struct string* value;
@@ -54,7 +55,7 @@ void print_text(struct text* text) {
 	printf("\n");
 
 }
-void insert_text(struct text* text, int line, int index, struct string* string) {
+void insert_text(struct text* text, int line, int index, struct string* string, struct stack* stack) {
 	struct line* node = text->start;
 	int counter = 0;
 	while (counter < line && node->pointer != NULL) {
@@ -62,7 +63,11 @@ void insert_text(struct text* text, int line, int index, struct string* string) 
 		node = node->pointer;
 	}
 	if (counter == line) {
-		insert_text_string(node->value, index, string);
+		struct data* command = (struct data*)malloc(sizeof(struct data));
+		command->line = line;
+		insert_text_string(node->value, index, string, command, stack);
+		free(command->string);
+		free(command);
 		return;
 	}
 	else {
@@ -70,7 +75,7 @@ void insert_text(struct text* text, int line, int index, struct string* string) 
 		return;
 	}
 }
-void insert_replacement_text(struct text* text, int line, int index, struct string* string) {
+void insert_replacement_text(struct text* text, int line, int index, struct string* string, struct stack* stack) {
 	struct line* node = text->start;
 	int counter = 0;
 	while (counter < line && node->pointer != NULL) {
@@ -78,8 +83,11 @@ void insert_replacement_text(struct text* text, int line, int index, struct stri
 		node = node->pointer;
 	}
 	if (counter == line) {
-		insert_replacement_string(node->value, index, string);
-		return;
+		struct data* command = (struct data*)malloc(sizeof(struct data));
+		command->line = line;
+		insert_replacement_string(node->value, index, string, command, stack);
+		free(command->string);
+		free(command);
 	}
 	else {
 		printf("There is no line with index %d\n", line);
@@ -112,7 +120,7 @@ void search_in_text(struct text* text, struct string* string) {
 }
 
 
-void delete_inside_text(struct text* text, int line, int index, int number_of_symbols) {
+void delete_inside_text(struct text* text, int line, int index, int number_of_symbols, struct stack* stack) {
 	struct line* node = text->start;
 	int counter = 0;
 	while (counter < line && node->pointer != NULL) {

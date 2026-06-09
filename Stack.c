@@ -1,9 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "String.h"
+enum Command {
+	InsertWithReplacment,
+	Insert,
+	Delete
+};
 
 struct data {
-	int value;
+	enum Command command;
+	int line;
+	int index;
+	int number_of_symbols;
+	struct string* string;
 };
 
 struct stack {
@@ -31,7 +40,15 @@ void destroy_stack(struct stack* stack) {
 		free(stack);
 	}
 }
-
+void clear_stack(struct stack* stack) {
+	for (int i = 0; i <= stack->size; i++) {
+		destroy_string(stack->values[i].string);
+	}
+	free(stack->values);
+	stack->values = (struct data*)malloc(sizeof(struct data) * 8);
+	stack->size = 0;
+	stack->max_size = 8;
+}
 void push(struct stack* stack, struct data* data) {
 	if (stack->size == stack->max_size) {
 		add_space(stack);
@@ -40,25 +57,19 @@ void push(struct stack* stack, struct data* data) {
 	stack->size++;
 }
 
-void pop(struct stack* stack, struct data* out_data) {
+void pop(struct stack* stack, struct data* data) {
 	if (stack->size == 0) {
 		printf("Stack is empty\n");
 		return;
 	}
 	stack->size--;
-	*out_data = stack->values[stack->size];
+	*data = stack->values[stack->size];
 }
 
-void peek(struct stack* stack, struct data* out_data) {
+void peek(struct stack* stack, struct data* data) {
 	if (stack->size == 0) {
 		printf("Stack is empty\n");
 		return;
 	}
-	*out_data = stack->values[stack->size - 1];
-}
-
-void print_stack(struct stack* stack) {
-	for (int i = stack->size - 1; i >= 0; i--) {
-		printf("%d. value - %d\n", stack->size - i, stack->values[i].value);
-	}
+	*data = stack->values[stack->size - 1];
 }
