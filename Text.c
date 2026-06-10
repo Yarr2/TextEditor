@@ -66,7 +66,6 @@ void insert_text(struct text* text, int line, int index, struct string* string, 
 		struct data* command = (struct data*)malloc(sizeof(struct data));
 		command->line = line;
 		insert_text_string(node->value, index, string, command, stack);
-		free(command->string);
 		free(command);
 		return;
 	}
@@ -86,7 +85,6 @@ void insert_replacement_text(struct text* text, int line, int index, struct stri
 		struct data* command = (struct data*)malloc(sizeof(struct data));
 		command->line = line;
 		insert_replacement_string(node->value, index, string, command, stack);
-		free(command->string);
 		free(command);
 	}
 	else {
@@ -128,7 +126,10 @@ void delete_inside_text(struct text* text, int line, int index, int number_of_sy
 		node = node->pointer;
 	}
 	if (counter == line) {
-		delete_inside_string(node->value, index, number_of_symbols);
+		struct data* command = (struct data*)malloc(sizeof(struct data));
+		command->line = line;
+		delete_inside_string(node->value, index, number_of_symbols, command, stack);
+		free(command);
 		return;
 	}
 	else {

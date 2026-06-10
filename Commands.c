@@ -3,6 +3,7 @@
 #include "Text.h"
 #include "String.h"
 #include <stdbool.h>
+#include "Stack.h"
 
 void help() {
 	printf("Help\n");
@@ -19,13 +20,38 @@ void help() {
 }
 
 void append_text(struct text* text, struct stack* stack) {
+	
+
+	int index = 0;
+	struct node* node = text->finish->value->start;
+	while (node != text->finish->value->finish) {
+		node = node->pointer;
+		index++;
+	}
+	
 	printf("Enter text you want to append > ");
 	char character;
 	scanf_s("%c", &character, 1);
+	int counter = 0;
 	while (character != '\n') {
+		counter++;
 		add_character(text->finish->value, character);
 		scanf_s("%c", &character, 1);
 	}
+	int line_index = 0;
+	struct line* line = text->start;
+	while (line != text->finish) {
+		line = line->pointer;
+		line_index++;
+	}
+	struct data* delete = (struct data*)malloc(sizeof(struct data));
+	delete->command = Delete;
+	delete->number_of_symbols = counter;
+	delete->line = line_index;
+	delete->index = index;
+	push(stack, delete);
+	free(delete);
+
 }
 
 void start_new_line(struct text* text) {
@@ -132,12 +158,48 @@ void delete_from_text(struct text* text, struct stack* stack) {
 
 }
 
-void undo_commands(struct text* text) {
-	printf("Undo command, not implemented\n");
+void undo_commands(struct text* text, struct stack* stack, struct stack* redo_stack) {
+	printf("Undo command\n");
+	int number_of_operations = 0;
+	printf("Enter number of operations to redo > ");
+	scanf_s("%d", &number_of_operations, 1);
+	char character;
+	scanf_s("%c", &character, 1);
+	while (character != '\n') {
+		scanf_s("%c", &character, 1);
+	}
+	struct data* command = (struct data*)malloc(sizeof(struct data));
+	for (int i = 0; i < number_of_operations; i++) {
+		pop(stack, command);
+		switch (command->command) {
+		case Delete: {
+			delete_inside_text(text, command->line, command->index, command->number_of_symbols, redo_stack);
+			break;
+		}
+		case Insert: {
+			print_string(command->string);
+			insert_text(text, command->line, command->index, command->string, redo_stack);
+			break;
+		} 
+		case InsertWithReplacment: {
+			delete_inside_text(text, command->line, command->index, command->number_of_symbols, redo_stack);
+			insert_text(text, command->line, command->index, command->string, redo_stack);
+			struct data* insert_with = (struct data*)malloc(sizeof(struct data));
+			insert_with->command = InsertWithReplacment;
+			push(redo_stack, insert_with);
+			break;
+		}
+		default: {
+			printf("All available to undo commands were undone\n");
+			return;
+		}
+		}
+	}
 }
 
 void redo_commands(struct text* text) {
-	printf("Redo command, not implemented\n");
+	printf("Redo command");
+
 }
 
 void cut_symbols(struct text* text, struct string* copy_buffer, struct stack* stack) {

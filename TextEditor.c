@@ -18,7 +18,10 @@ void get_command(char (*character)[2]) {
 
 }
 
-void process_command(int command,struct text* text,struct string* copy_buffer, struct stack* stack) {
+void process_command(int command,struct text* text,struct string* copy_buffer, struct stack* stack, struct stack* redo_stack) {
+	if (command != 9 && command != 10) {
+		clear_stack(redo_stack);
+	}
 	switch (command) { // functions from Command.c
 	case 0:
 	{
@@ -67,12 +70,12 @@ void process_command(int command,struct text* text,struct string* copy_buffer, s
 	}
 	case 9:
 	{
-		undo_commands(text);
+		undo_commands(text, stack, redo_stack);
 		break;
 	}
 	case 10:
 	{
-		redo_commands(text);
+		redo_commands(text, redo_stack);
 		break;
 	}
 	case 11:
@@ -126,6 +129,7 @@ int main() {
 	struct text* text = (struct text*)malloc(sizeof(struct text));
 	create_text(text);
 	struct stack* stack = create_stack();
+	struct stack* redo_stack = create_stack();
 	if (debug) {
 		printf("DEBUG MODE\n");
 		destroy_text(text);
@@ -145,6 +149,8 @@ int main() {
 			printf("Program exited\n");
 			destroy_string(copy_buffer);
 			destroy_text(text);
+			destroy_stack(stack);
+			destroy_stack(redo_stack);
 			return 0;
 		}
 		while (character != '\n')
@@ -152,7 +158,7 @@ int main() {
 			scanf_s("%c", &character, 1);
 		}
 
-		process_command(command,text,copy_buffer, stack);
+		process_command(command,text,copy_buffer, stack, redo_stack);
 	}
 	return 0;
 }

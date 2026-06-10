@@ -26,3 +26,4 @@ void push(struct stack* stack, struct data* data);
 void pop(struct stack* stack, struct data* data);
 void peek(struct stack* stack, struct data* data);
 void print_stack(struct stack* stack);
+void clear_stack(struct stack* stack);

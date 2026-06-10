@@ -4,7 +4,8 @@
 enum Command {
 	InsertWithReplacment,
 	Insert,
-	Delete
+	Delete,
+	NoCommand
 };
 
 struct data {
@@ -41,7 +42,7 @@ void destroy_stack(struct stack* stack) {
 	}
 }
 void clear_stack(struct stack* stack) {
-	for (int i = 0; i <= stack->size; i++) {
+	for (int i = 0; i < stack->size; i++) {
 		destroy_string(stack->values[i].string);
 	}
 	free(stack->values);
@@ -50,6 +51,9 @@ void clear_stack(struct stack* stack) {
 	stack->max_size = 8;
 }
 void push(struct stack* stack, struct data* data) {
+	if (stack == NULL) {
+		return;
+	}
 	if (stack->size == stack->max_size) {
 		add_space(stack);
 	}
@@ -60,6 +64,7 @@ void push(struct stack* stack, struct data* data) {
 void pop(struct stack* stack, struct data* data) {
 	if (stack->size == 0) {
 		printf("Stack is empty\n");
+		data->command = NoCommand;
 		return;
 	}
 	stack->size--;

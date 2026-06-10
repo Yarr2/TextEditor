@@ -213,38 +213,54 @@ void search_for_substring(struct string* string, struct string* substring, int l
 		node = node->pointer;
 	}
 }
-void delete_inside_string(struct string* string, int index, int number_of_symbols) {
-	int current_index = 0;
-	struct node* node = string->start;
-	while (current_index < index - 1 && node->pointer != NULL) {
-		node = node->pointer;
-		current_index++;
-	}
-	if (current_index < index - 1) {
-		printf("There is no such index at this line");
+void delete_inside_string(struct string* string, int index, int number_of_symbols, struct data* data, struct stack* stack) {
+	if (string == NULL || string->start == NULL) {
 		return;
 	}
-	
-	struct node* delete_node = node->pointer;
-	if (index == 0) {
-		delete_node = node;
+	data->index = index;
+	data->command = Insert;
+	data->number_of_symbols = 0;
+	data->string = (struct string*)malloc(sizeof(struct string));
+	if (data->string != NULL) {
+		create_string(data->string);
+	}
+
+	struct node* prev_node = NULL;
+	struct node* current_node = string->start;
+	int current_index = 0;
+
+	while (current_index < index && current_node != NULL) {
+		prev_node = current_node;
+		current_node = current_node->pointer;
+		current_index++;
+	}
+	if (current_index < index || current_node == NULL) {
+		printf("There is no such index at this line\n");
+		return;
 	}
 	int counter = 0;
-	struct node* temp_pointer;
-	while (counter < number_of_symbols && delete_node -> pointer != NULL) {
-		temp_pointer = delete_node->pointer;
-		delete_node->value = 0;
-		delete_node->pointer = NULL;
-		free(delete_node);
-		delete_node = temp_pointer;
+	while (counter < number_of_symbols && current_node != NULL) {
+		struct node* next_node = current_node->pointer;
+
+		if (data->string != NULL) {
+			add_character(data->string, current_node->value);
+			data->number_of_symbols++;
+		}
+
+		free(current_node);
+		current_node = next_node;
 		counter++;
 	}
-	node->pointer = delete_node;
-	if (index == 0) {
-		string->start = delete_node;
-	}
-}
 
+	if (index == 0) {
+		string->start = current_node;
+	}
+	else {
+		prev_node->pointer = current_node;
+	}
+
+	push(stack, data);
+}
 void copy_string(struct string* original, struct string* copy) {
 	clear_string(copy);
 	struct node* node = original->start;
