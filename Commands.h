@@ -10,7 +10,7 @@ void insert_into_text(struct text* text, struct stack* stack);
 void search_substring(struct text* text);
 void delete_from_text(struct text* text, struct stack* stack);
 void undo_commands(struct text* text, struct stack* stack, struct stack* redo_stack);
-void redo_commands(struct text* text, struct stacl* redo_stack);
+void redo_commands(struct text* text, struct stacl* stack, struct stacl* redo_stack);
 void cut_symbols(struct text* text, struct string* copy_buffer, struct stack* stack);
 void paste_symbols(struct text* text, struct string* copy_buffer, struct stack* stack);
 void copy_symbols(struct text* text, struct string* copy_buffer);

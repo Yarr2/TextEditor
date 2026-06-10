@@ -19,7 +19,8 @@ void get_command(char (*character)[2]) {
 }
 
 void process_command(int command,struct text* text,struct string* copy_buffer, struct stack* stack, struct stack* redo_stack) {
-	if (command != 9 && command != 10) {
+	if (command == 1 || command ==  2 || command == 6 ||  command == 8 ||
+		command == 11 || command == 12 || command == 14) {
 		clear_stack(redo_stack);
 	}
 	switch (command) { // functions from Command.c
@@ -75,7 +76,7 @@ void process_command(int command,struct text* text,struct string* copy_buffer, s
 	}
 	case 10:
 	{
-		redo_commands(text, redo_stack);
+		redo_commands(text, stack, redo_stack);
 		break;
 	}
 	case 11:

@@ -161,7 +161,7 @@ void delete_from_text(struct text* text, struct stack* stack) {
 void undo_commands(struct text* text, struct stack* stack, struct stack* redo_stack) {
 	printf("Undo command\n");
 	int number_of_operations = 0;
-	printf("Enter number of operations to redo > ");
+	printf("Enter number of operations to undo > ");
 	scanf_s("%d", &number_of_operations, 1);
 	char character;
 	scanf_s("%c", &character, 1);
@@ -177,7 +177,6 @@ void undo_commands(struct text* text, struct stack* stack, struct stack* redo_st
 			break;
 		}
 		case Insert: {
-			print_string(command->string);
 			insert_text(text, command->line, command->index, command->string, redo_stack);
 			break;
 		} 
@@ -197,8 +196,38 @@ void undo_commands(struct text* text, struct stack* stack, struct stack* redo_st
 	}
 }
 
-void redo_commands(struct text* text) {
-	printf("Redo command");
+void redo_commands(struct text* text, struct stack* stack, struct stack* redo_stack) {
+	printf("Redo command\n");
+	int number_of_operations = 0;
+	printf("Enter number of operations to redo > ");
+	scanf_s("%d", &number_of_operations, 1);
+	char character;
+	scanf_s("%c", &character, 1);
+	while (character != '\n') {
+		scanf_s("%c", &character, 1);
+	}
+	struct data* command = (struct data*)malloc(sizeof(struct data));
+	for (int i = 0; i < number_of_operations; i++) {
+		pop(redo_stack, command);
+		switch (command->command) {
+		case Delete: {
+			delete_inside_text(text, command->line, command->index, command->number_of_symbols, stack);
+			break;
+		}
+		case Insert: {
+			insert_text(text, command->line, command->index, command->string, stack);
+			break;
+		}
+		case InsertWithReplacment: {
+			i = i - 2; // I add two commands in undo section, so now  I need to execute two more
+			break;
+		}
+		default: {
+			printf("All available to redo commands were undone\n");
+			return;
+		}
+		}
+	}
 
 }
 
