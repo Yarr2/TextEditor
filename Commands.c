@@ -28,7 +28,6 @@ void append_text(struct text* text, struct stack* stack) {
 		node = node->pointer;
 		index++;
 	}
-	
 	printf("Enter text you want to append > ");
 	char character;
 	scanf_s("%c", &character, 1);
@@ -168,6 +167,11 @@ void undo_commands(struct text* text, struct stack* stack, struct stack* redo_st
 	while (character != '\n') {
 		scanf_s("%c", &character, 1);
 	}
+	if (stack->size == 0) {
+		printf("There are no commands to undo\n");
+		return;
+	}
+
 	struct data* command = (struct data*)malloc(sizeof(struct data));
 	for (int i = 0; i < number_of_operations; i++) {
 		pop(stack, command);
@@ -205,6 +209,10 @@ void redo_commands(struct text* text, struct stack* stack, struct stack* redo_st
 	scanf_s("%c", &character, 1);
 	while (character != '\n') {
 		scanf_s("%c", &character, 1);
+	}
+	if (redo_stack->size == 0) {
+		printf("There are no commands to redo\n");
+		return;
 	}
 	struct data* command = (struct data*)malloc(sizeof(struct data));
 	for (int i = 0; i < number_of_operations; i++) {

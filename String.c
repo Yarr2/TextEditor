@@ -150,6 +150,9 @@ void insert_replacement_string(struct string* string, int index, struct string* 
 }
 
 void destroy_string(struct string* string) {
+	if (string == NULL) {
+		return;
+	}
 	struct node* node = string->start;
 	struct node* temp;
 	while (node->pointer != NULL) {
@@ -214,7 +217,7 @@ void search_for_substring(struct string* string, struct string* substring, int l
 	}
 }
 void delete_inside_string(struct string* string, int index, int number_of_symbols, struct data* data, struct stack* stack) {
-	if (string == NULL || string->start == NULL) {
+	if (string == NULL || string->start->pointer == NULL) {
 		return;
 	}
 	data->index = index;

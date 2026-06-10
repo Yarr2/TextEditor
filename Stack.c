@@ -63,7 +63,6 @@ void push(struct stack* stack, struct data* data) {
 
 void pop(struct stack* stack, struct data* data) {
 	if (stack->size == 0) {
-		printf("Stack is empty\n");
 		data->command = NoCommand;
 		return;
 	}
@@ -73,7 +72,6 @@ void pop(struct stack* stack, struct data* data) {
 
 void peek(struct stack* stack, struct data* data) {
 	if (stack->size == 0) {
-		printf("Stack is empty\n");
 		return;
 	}
 	*data = stack->values[stack->size - 1];
